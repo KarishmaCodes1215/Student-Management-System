@@ -1,29 +1,35 @@
+
 # Student Management System
 
 ## About the Project
-The Student Management System is a beginner-friendly Python project designed to manage student information.
+A beginner-friendly Student Management System built using Python and SQLite to manage student records.
 
 ## Features
 - Add student details
-- View student records
-- Search for students
-- Update student information
-- Delete student records (if implemented)
+- View all student records
+- Search students by ID
+- Delete student records
+- Store student data permanently using SQLite
 
 ## Technologies Used
 - Python 3
-
-## Requirements
-- Python installed on your computer
+- SQLite
 
 ## How to Run
-1. Download or clone this repository.
-2. Open the project folder in Command Prompt.
-3. Run the following command:
+1. Install Python 3.
+2. Download or clone this repository.
+3. Open Command Prompt in the project folder.
+4. Run:
 
 ```bash
-python main.py
+py main.py
 ```
 
+## Learning Outcomes
+- Python programming and loops
+- Functions of a database
+- SQL queries for inserting, viewing, searching, and deleting records
+- Permanent data storage
+
 ## Author
-Developed as my first Python project while learning programming and software development.
+Created as my first Python project.
