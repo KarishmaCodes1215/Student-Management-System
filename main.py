@@ -1,4 +1,21 @@
-students = []
+
+
+import sqlite3
+
+# Connect to the database
+conn = sqlite3.connect("students.db")
+cursor = conn.cursor()
+
+# Create the table if it does not exist
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS students (
+    student_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    age TEXT,
+    course TEXT
+)
+""")
+conn.commit()
 
 while True:
     print("\n--- Student Management System ---")
@@ -16,17 +33,21 @@ while True:
         age = input("Enter Student Age: ")
         course = input("Enter Course: ")
 
-        student = {
-            "ID": student_id,
-            "Name": name,
-            "Age": age,
-            "Course": course
-        }
+        try:
+            cursor.execute(
+                "INSERT INTO students VALUES (?, ?, ?, ?)",
+                (student_id, name, age, course)
+            )
+            conn.commit()
+            print("Student added successfully!")
 
-        students.append(student)
-        print("Student added successfully!")
+        except sqlite3.IntegrityError:
+            print("Student ID already exists!")
 
     elif choice == "2":
+        cursor.execute("SELECT * FROM students")
+        students = cursor.fetchall()
+
         if len(students) == 0:
             print("No student records found.")
         else:
@@ -35,29 +56,30 @@ while True:
 
     elif choice == "3":
         student_id = input("Enter Student ID: ")
-        found = False
 
-        for student in students:
-            if student["ID"] == student_id:
-                print(student)
-                found = True
-                break
+        cursor.execute(
+            "SELECT * FROM students WHERE student_id = ?",
+            (student_id,)
+        )
+        student = cursor.fetchone()
 
-        if not found:
+        if student:
+            print(student)
+        else:
             print("Student not found.")
 
     elif choice == "4":
         student_id = input("Enter Student ID: ")
-        found = False
 
-        for student in students:
-            if student["ID"] == student_id:
-                students.remove(student)
-                print("Student deleted successfully!")
-                found = True
-                break
+        cursor.execute(
+            "DELETE FROM students WHERE student_id = ?",
+            (student_id,)
+        )
+        conn.commit()
 
-        if not found:
+        if cursor.rowcount > 0:
+            print("Student deleted successfully!")
+        else:
             print("Student not found.")
 
     elif choice == "5":
@@ -66,3 +88,5 @@ while True:
 
     else:
         print("Invalid choice. Try again.")
+
+conn.close()
